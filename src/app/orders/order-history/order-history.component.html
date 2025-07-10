@@ -1,0 +1,38 @@
+<div class="order-history-container">
+  <h2>Order History</h2>
+
+  <div *ngIf="orderHistory.length > 0">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Trading Symbol</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Order Type</th>
+          <th>Transaction Type</th>
+          <th>Order Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orderHistory">
+          <td>{{ order.order_id }}</td>
+          <td>{{ order.tradingsymbol }}</td>
+          <td>{{ order.quantity }}</td>
+          <td>{{ order.price | currency }}</td>
+          <td>{{ order.status }}</td>
+          <td>{{ order.order_type }}</td>
+          <td>{{ order.transaction_type }}</td>
+          <td>{{ order.order_timestamp | date:'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="orderHistory.length === 0 && !errorMessage">
+    <p>No order history found.</p>
+  </div>
+
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+</div>

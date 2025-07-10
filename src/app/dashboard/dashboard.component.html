@@ -1,0 +1,13 @@
+<div class="dashboard-container">
+  <h2>Welcome to the Dashboard!</h2>
+  <p>This is a protected area.</p>
+
+  <div *ngIf="portfolioPnl">
+    <h3>Portfolio PnL:</h3>
+    <p>Total Realized PnL: {{ portfolioPnl.totalRealizedPnl | currency }}</p>
+    <p>Total Unrealized PnL: {{ portfolioPnl.totalUnrealizedPnl | currency }}</p>
+    <p>Overall PnL: {{ portfolioPnl.overallPnl | currency }}</p>
+  </div>
+
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+</div>

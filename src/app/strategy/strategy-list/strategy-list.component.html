@@ -1,0 +1,32 @@
+<div class="strategy-list-container">
+  <h2>Active Strategies</h2>
+
+  <div *ngIf="strategies.length > 0">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Instrument</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let strategy of strategies">
+          <td>{{ strategy.id }}</td>
+          <td>{{ strategy.name }}</td>
+          <td>{{ strategy.status }}</td>
+          <td>{{ strategy.instrumentToken }}</td>
+          <td>{{ strategy.quantity }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="strategies.length === 0 && !errorMessage">
+    <p>No active strategies found.</p>
+  </div>
+
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+</div>

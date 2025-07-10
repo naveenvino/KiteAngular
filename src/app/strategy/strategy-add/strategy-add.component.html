@@ -1,0 +1,50 @@
+<div class="strategy-add-container">
+  <h2>Add New Strategy</h2>
+
+  <form [formGroup]="strategyForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="id">ID:</label>
+      <input type="text" id="id" formControlName="id" class="form-control">
+      <div *ngIf="strategyForm.get('id')?.invalid && strategyForm.get('id')?.touched" class="text-danger">
+        ID is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" formControlName="name" class="form-control">
+      <div *ngIf="strategyForm.get('name')?.invalid && strategyForm.get('name')?.touched" class="text-danger">
+        Name is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="status">Status:</label>
+      <select id="status" formControlName="status" class="form-control">
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="instrumentToken">Instrument Token:</label>
+      <input type="text" id="instrumentToken" formControlName="instrumentToken" class="form-control">
+      <div *ngIf="strategyForm.get('instrumentToken')?.invalid && strategyForm.get('instrumentToken')?.touched" class="text-danger">
+        Instrument Token is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" formControlName="quantity" class="form-control">
+      <div *ngIf="strategyForm.get('quantity')?.invalid && strategyForm.get('quantity')?.touched" class="text-danger">
+        Quantity is required and must be at least 1.
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="strategyForm.invalid">Add Strategy</button>
+
+    <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+  </form>
+</div>

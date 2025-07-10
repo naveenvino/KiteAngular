@@ -1,0 +1,32 @@
+<div class="holdings-container">
+  <h2>Portfolio Holdings</h2>
+
+  <div *ngIf="holdings.length > 0">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Instrument</th>
+          <th>Quantity</th>
+          <th>Average Price</th>
+          <th>Last Price</th>
+          <th>P&L</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let holding of holdings">
+          <td>{{ holding.tradingsymbol }}</td>
+          <td>{{ holding.quantity }}</td>
+          <td>{{ holding.average_price | currency }}</td>
+          <td>{{ holding.last_price | currency }}</td>
+          <td>{{ (holding.last_price - holding.average_price) * holding.quantity | currency }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="holdings.length === 0 && !errorMessage">
+    <p>No holdings found.</p>
+  </div>
+
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+</div>
