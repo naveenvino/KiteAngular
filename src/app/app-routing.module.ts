@@ -11,20 +11,40 @@ import { QuotesComponent } from './market-data/quotes/quotes.component';
 import { StrategyListComponent } from './strategy/strategy-list/strategy-list.component';
 import { StrategyAddComponent } from './strategy/strategy-add/strategy-add.component';
 import { BacktestComponent } from './backtesting/backtest/backtest.component';
+import { ScreenerListComponent } from './screener/screener-list/screener-list.component';
+import { ScreenerAddComponent } from './screener/screener-add/screener-add.component';
+import { ScreenerRunComponent } from './screener/screener-run/screener-run.component';
+import { NotificationPreferencesComponent } from './notifications/notification-preferences/notification-preferences.component';
+import { NotificationAddComponent } from './notifications/notification-add/notification-add.component';
+import { TradingActionsComponent } from './trading/trading-actions/trading-actions.component';
+import { MainLayoutComponent } from './main-layout/main-layout.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-  { path: 'holdings', component: PortfolioHoldingsComponent, canActivate: [AuthGuard] },
-  { path: 'positions', component: PortfolioPositionsComponent, canActivate: [AuthGuard] },
-  { path: 'open-orders', component: OpenOrdersComponent, canActivate: [AuthGuard] },
-  { path: 'order-history', component: OrderHistoryComponent, canActivate: [AuthGuard] },
-  { path: 'quotes', component: QuotesComponent, canActivate: [AuthGuard] },
-  { path: 'strategies', component: StrategyListComponent, canActivate: [AuthGuard] },
-  { path: 'add-strategy', component: StrategyAddComponent, canActivate: [AuthGuard] },
-  { path: 'backtest', component: BacktestComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  // Add other routes here later
+  {
+    path: '', // This is the authenticated area
+    component: MainLayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'holdings', component: PortfolioHoldingsComponent },
+      { path: 'positions', component: PortfolioPositionsComponent },
+      { path: 'open-orders', component: OpenOrdersComponent },
+      { path: 'order-history', component: OrderHistoryComponent },
+      { path: 'quotes', component: QuotesComponent },
+      { path: 'strategies', component: StrategyListComponent },
+      { path: 'add-strategy', component: StrategyAddComponent },
+      { path: 'backtest', component: BacktestComponent },
+      { path: 'screeners', component: ScreenerListComponent },
+      { path: 'add-screener', component: ScreenerAddComponent },
+      { path: 'run-screener/:id', component: ScreenerRunComponent },
+      { path: 'notification-preferences', component: NotificationPreferencesComponent },
+      { path: 'add-notification-preference', component: NotificationAddComponent },
+      { path: 'trading-actions', component: TradingActionsComponent },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' } // Default authenticated route
+    ]
+  },
+  { path: '**', redirectTo: 'login' } // Redirect any unknown routes to login
 ];
 
 @NgModule({

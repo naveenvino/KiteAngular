@@ -1,30 +1,52 @@
 <div class="strategy-list-container">
   <h2>Active Strategies</h2>
 
-  <div *ngIf="strategies.length > 0">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Status</th>
-          <th>Instrument</th>
-          <th>Quantity</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let strategy of strategies">
-          <td>{{ strategy.id }}</td>
-          <td>{{ strategy.name }}</td>
-          <td>{{ strategy.status }}</td>
-          <td>{{ strategy.instrumentToken }}</td>
-          <td>{{ strategy.quantity }}</td>
-        </tr>
-      </tbody>
+  <mat-form-field appearance="standard" class="full-width-input">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. MyStrategy">
+  </mat-form-field>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+        <td mat-cell *matCellDef="let strategy"> {{strategy.id}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+        <td mat-cell *matCellDef="let strategy"> {{strategy.name}} </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <td mat-cell *matCellDef="let strategy"> {{strategy.status}} </td>
+      </ng-container>
+
+      <!-- Instrument Column -->
+      <ng-container matColumnDef="instrument">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Instrument </th>
+        <td mat-cell *matCellDef="let strategy"> {{strategy.instrumentToken}} </td>
+      </ng-container>
+
+      <!-- Quantity Column -->
+      <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantity </th>
+        <td mat-cell *matCellDef="let strategy"> {{strategy.quantity}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>
 
-  <div *ngIf="strategies.length === 0 && !errorMessage">
+  <div *ngIf="dataSource.data.length === 0 && !errorMessage">
     <p>No active strategies found.</p>
   </div>
 

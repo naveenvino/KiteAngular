@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,6 +14,28 @@ import { QuotesComponent } from './market-data/quotes/quotes.component';
 import { StrategyListComponent } from './strategy/strategy-list/strategy-list.component';
 import { StrategyAddComponent } from './strategy/strategy-add/strategy-add.component';
 import { BacktestComponent } from './backtesting/backtest/backtest.component';
+import { ScreenerListComponent } from './screener/screener-list/screener-list.component';
+import { ScreenerAddComponent } from './screener/screener-add/screener-add.component';
+import { ScreenerRunComponent } from './screener/screener-run/screener-run.component';
+import { NotificationPreferencesComponent } from './notifications/notification-preferences/notification-preferences.component';
+import { NotificationAddComponent } from './notifications/notification-add/notification-add.component';
+import { TradingActionsComponent } from './trading/trading-actions/trading-actions.component';
+import { MainLayoutComponent } from './main-layout/main-layout.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -31,14 +54,37 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     QuotesComponent,
     StrategyListComponent,
     StrategyAddComponent,
-    BacktestComponent
+    BacktestComponent,
+    ScreenerListComponent,
+    ScreenerAddComponent,
+    ScreenerRunComponent,
+    NotificationPreferencesComponent,
+    NotificationAddComponent,
+    TradingActionsComponent,
+    MainLayoutComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatCardModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatTableModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatProgressSpinnerModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {

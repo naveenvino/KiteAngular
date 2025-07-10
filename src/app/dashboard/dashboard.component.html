@@ -1,13 +1,36 @@
 <div class="dashboard-container">
-  <h2>Welcome to the Dashboard!</h2>
-  <p>This is a protected area.</p>
+  <mat-card class="dashboard-card">
+    <mat-card-header>
+      <mat-card-title>Welcome to the Dashboard!</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>This is a protected area.</p>
 
-  <div *ngIf="portfolioPnl">
-    <h3>Portfolio PnL:</h3>
-    <p>Total Realized PnL: {{ portfolioPnl.totalRealizedPnl | currency }}</p>
-    <p>Total Unrealized PnL: {{ portfolioPnl.totalUnrealizedPnl | currency }}</p>
-    <p>Overall PnL: {{ portfolioPnl.overallPnl | currency }}</p>
-  </div>
+      <div *ngIf="portfolioPnl" class="pnl-summary">
+        <h3>Portfolio PnL:</h3>
+        <div class="pnl-grid">
+          <mat-card class="pnl-item">
+            <mat-card-content>
+              <h4>Total Realized PnL</h4>
+              <p>{{ portfolioPnl.totalRealizedPnl | currency }}</p>
+            </mat-card-content>
+          </mat-card>
+          <mat-card class="pnl-item">
+            <mat-card-content>
+              <h4>Total Unrealized PnL</h4>
+              <p>{{ portfolioPnl.totalUnrealizedPnl | currency }}</p>
+            </mat-card-content>
+          </mat-card>
+          <mat-card class="pnl-item">
+            <mat-card-content>
+              <h4>Overall PnL</h4>
+              <p>{{ portfolioPnl.overallPnl | currency }}</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
 
-  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+      <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+    </mat-card-content>
+  </mat-card>
 </div>

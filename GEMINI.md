@@ -9,8 +9,18 @@ This document provides essential context for the Gemini CLI regarding the `KiteA
 *   **Current State:**
     *   Authentication (Login, Logout) implemented.
     *   JWT Token handling via `AuthService` and `AuthInterceptor`.
+    *   **Token Expiry Validation:** `AuthService` now validates JWT token expiry and automatically removes expired tokens from local storage.
     *   Route protection using `AuthGuard`.
     *   Portfolio Module (Holdings, Positions, PnL) implemented.
+    *   Orders Module (Open Orders, Order History) implemented.
+    *   Market Data & Quotes Module (Live Quotes) implemented.
+    *   Strategy Module (List, Add Strategies) implemented.
+    *   Backtesting Module (Run Backtest) implemented.
+    *   Screener Module (List, Add, Run Screeners) implemented.
+    *   Notifications Module (List, Add Notification Preferences) implemented.
+    *   **UI Modernization:** All major components refactored to use Angular Material for a modern look and feel.
+    *   **Feature Refinement:** Filtering, sorting, and pagination implemented for all list components (Holdings, Positions, Open Orders, Order History, Quotes, Strategies, Screeners, Notification Preferences).
+    *   **Documentation:** Inline JSDoc comments added to all service files for improved code readability and API understanding.
     *   API communication uses `https://localhost:56412`.
 
 ## API Project (`KiteConnectApi`)

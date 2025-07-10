@@ -1,36 +1,70 @@
 <div class="order-history-container">
   <h2>Order History</h2>
 
-  <div *ngIf="orderHistory.length > 0">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Order ID</th>
-          <th>Trading Symbol</th>
-          <th>Quantity</th>
-          <th>Price</th>
-          <th>Status</th>
-          <th>Order Type</th>
-          <th>Transaction Type</th>
-          <th>Order Timestamp</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let order of orderHistory">
-          <td>{{ order.order_id }}</td>
-          <td>{{ order.tradingsymbol }}</td>
-          <td>{{ order.quantity }}</td>
-          <td>{{ order.price | currency }}</td>
-          <td>{{ order.status }}</td>
-          <td>{{ order.order_type }}</td>
-          <td>{{ order.transaction_type }}</td>
-          <td>{{ order.order_timestamp | date:'short' }}</td>
-        </tr>
-      </tbody>
+  <mat-form-field appearance="standard" class="full-width-input">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. INFY">
+  </mat-form-field>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+
+      <!-- Order ID Column -->
+      <ng-container matColumnDef="orderId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Order ID </th>
+        <td mat-cell *matCellDef="let order"> {{order.order_id}} </td>
+      </ng-container>
+
+      <!-- Trading Symbol Column -->
+      <ng-container matColumnDef="tradingSymbol">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Trading Symbol </th>
+        <td mat-cell *matCellDef="let order"> {{order.tradingsymbol}} </td>
+      </ng-container>
+
+      <!-- Quantity Column -->
+      <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantity </th>
+        <td mat-cell *matCellDef="let order"> {{order.quantity}} </td>
+      </ng-container>
+
+      <!-- Price Column -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+        <td mat-cell *matCellDef="let order"> {{order.price | currency}} </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <td mat-cell *matCellDef="let order"> {{order.status}} </td>
+      </ng-container>
+
+      <!-- Order Type Column -->
+      <ng-container matColumnDef="orderType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Order Type </th>
+        <td mat-cell *matCellDef="let order"> {{order.order_type}} </td>
+      </ng-container>
+
+      <!-- Transaction Type Column -->
+      <ng-container matColumnDef="transactionType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Transaction Type </th>
+        <td mat-cell *matCellDef="let order"> {{order.transaction_type}} </td>
+      </ng-container>
+
+      <!-- Order Timestamp Column -->
+      <ng-container matColumnDef="orderTimestamp">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Order Timestamp </th>
+        <td mat-cell *matCellDef="let order"> {{order.order_timestamp | date:'short'}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>
 
-  <div *ngIf="orderHistory.length === 0 && !errorMessage">
+  <div *ngIf="dataSource.data.length === 0 && !errorMessage">
     <p>No order history found.</p>
   </div>
 

@@ -1,0 +1,17 @@
+<div class="trading-actions-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Trading Actions</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Use the button below to send a command to exit all open positions.</p>
+      <button mat-raised-button color="warn" (click)="exitAllPositions()" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span *ngIf="!loading">Exit All Positions</span>
+      </button>
+
+      <div *ngIf="message" class="alert alert-success mt-3">{{ message }}</div>
+      <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+    </mat-card-content>
+  </mat-card>
+</div>

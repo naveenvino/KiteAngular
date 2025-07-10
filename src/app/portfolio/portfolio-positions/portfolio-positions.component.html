@@ -1,32 +1,58 @@
 <div class="positions-container">
   <h2>Portfolio Positions</h2>
 
-  <div *ngIf="positions.length > 0">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Instrument</th>
-          <th>Quantity</th>
-          <th>Average Price</th>
-          <th>Last Price</th>
-          <th>Realized P&L</th>
-          <th>Unrealized P&L</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let position of positions">
-          <td>{{ position.tradingsymbol }}</td>
-          <td>{{ position.quantity }}</td>
-          <td>{{ position.average_price | currency }}</td>
-          <td>{{ position.last_price | currency }}</td>
-          <td>{{ position.realised | currency }}</td>
-          <td>{{ position.unrealised | currency }}</td>
-        </tr>
-      </tbody>
+  <mat-form-field appearance="standard" class="full-width-input">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. INFY">
+  </mat-form-field>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+
+      <!-- Instrument Column -->
+      <ng-container matColumnDef="instrument">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Instrument </th>
+        <td mat-cell *matCellDef="let position"> {{position.tradingsymbol}} </td>
+      </ng-container>
+
+      <!-- Quantity Column -->
+      <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantity </th>
+        <td mat-cell *matCellDef="let position"> {{position.quantity}} </td>
+      </ng-container>
+
+      <!-- Average Price Column -->
+      <ng-container matColumnDef="averagePrice">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Average Price </th>
+        <td mat-cell *matCellDef="let position"> {{position.average_price | currency}} </td>
+      </ng-container>
+
+      <!-- Last Price Column -->
+      <ng-container matColumnDef="lastPrice">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Price </th>
+        <td mat-cell *matCellDef="let position"> {{position.last_price | currency}} </td>
+      </ng-container>
+
+      <!-- Realized P&L Column -->
+      <ng-container matColumnDef="realizedPnl">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Realized P&L </th>
+        <td mat-cell *matCellDef="let position"> {{position.realised | currency}} </td>
+      </ng-container>
+
+      <!-- Unrealized P&L Column -->
+      <ng-container matColumnDef="unrealizedPnl">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Unrealized P&L </th>
+        <td mat-cell *matCellDef="let position"> {{position.unrealised | currency}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>
 
-  <div *ngIf="positions.length === 0 && !errorMessage">
+  <div *ngIf="dataSource.data.length === 0 && !errorMessage">
     <p>No positions found.</p>
   </div>
 

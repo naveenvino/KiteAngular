@@ -1,0 +1,54 @@
+<div class="screener-run-container">
+  <h2>Screener Results for ID: {{ screenerId }}</h2>
+
+  <mat-form-field appearance="standard" class="full-width-input">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. INFY">
+  </mat-form-field>
+
+  <div *ngIf="loading">
+    <p>Running screener... Please wait.</p>
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="dataSource.data.length > 0">
+    <h3>Found Instruments:</h3>
+    <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+
+      <!-- Instrument Token Column -->
+      <ng-container matColumnDef="instrumentToken">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Instrument Token </th>
+        <td mat-cell *matCellDef="let instrument"> {{instrument.instrument_token}} </td>
+      </ng-container>
+
+      <!-- Trading Symbol Column -->
+      <ng-container matColumnDef="tradingSymbol">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Trading Symbol </th>
+        <td mat-cell *matCellDef="let instrument"> {{instrument.tradingsymbol}} </td>
+      </ng-container>
+
+      <!-- Exchange Column -->
+      <ng-container matColumnDef="exchange">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Exchange </th>
+        <td mat-cell *matCellDef="let instrument"> {{instrument.exchange}} </td>
+      </ng-container>
+
+      <!-- Instrument Type Column -->
+      <ng-container matColumnDef="instrumentType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Instrument Type </th>
+        <td mat-cell *matCellDef="let instrument"> {{instrument.instrument_type}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+
+  <div *ngIf="dataSource.data.length === 0 && !loading && !errorMessage">
+    <p>No instruments found matching the criteria.</p>
+  </div>
+
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+</div>

@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { OrdersService } from '../../orders.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-order-history',
@@ -7,8 +10,12 @@ import { OrdersService } from '../../orders.service';
   styleUrls: ['./order-history.component.css']
 })
 export class OrderHistoryComponent implements OnInit {
-  orderHistory: any[] = [];
+  displayedColumns: string[] = ['orderId', 'tradingSymbol', 'quantity', 'price', 'status', 'orderType', 'transactionType', 'orderTimestamp'];
+  dataSource = new MatTableDataSource<any>();
   errorMessage: string = '';
+
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private ordersService: OrdersService) { }
 
@@ -16,10 +23,20 @@ export class OrderHistoryComponent implements OnInit {
     this.getOrderHistory();
   }
 
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   getOrderHistory(): void {
     this.ordersService.getOrderHistory().subscribe(
       data => {
-        this.orderHistory = data;
+        this.dataSource.data = data;
       },
       error => {
         this.errorMessage = 'Failed to load order history.';

@@ -1,0 +1,43 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="side" opened class="sidenav">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard" (click)="sidenav.close()">Dashboard</a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/holdings" (click)="sidenav.close()">Holdings</a>
+      <a mat-list-item routerLink="/positions" (click)="sidenav.close()">Positions</a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/open-orders" (click)="sidenav.close()">Open Orders</a>
+      <a mat-list-item routerLink="/order-history" (click)="sidenav.close()">Order History</a>
+      <a mat-list-item routerLink="/trading-actions" (click)="sidenav.close()">Trading Actions</a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/quotes" (click)="sidenav.close()">Quotes</a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/strategies" (click)="sidenav.close()">Strategies</a>
+      <a mat-list-item routerLink="/add-strategy" (click)="sidenav.close()">Add Strategy</a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/backtest" (click)="sidenav.close()">Backtest</a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/screeners" (click)="sidenav.close()">Screeners</a>
+      <a mat-list-item routerLink="/add-screener" (click)="sidenav.close()">Add Screener</a>
+      <a mat-list-item routerLink="/run-screener/some-id" (click)="sidenav.close()">Run Screener</a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/notification-preferences" (click)="sidenav.close()">Notifications</a>
+      <a mat-list-item routerLink="/add-notification-preference" (click)="sidenav.close()">Add Notification</a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="toolbar-title">KiteConnect UI</span>
+      <span class="spacer"></span>
+      <button mat-raised-button color="warn" (click)="logout()">Logout</button>
+    </mat-toolbar>
+
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
