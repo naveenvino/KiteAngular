@@ -1,86 +1,71 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
+import { Router } from '@angular/router';
 
 interface DecodedToken {
   exp: number;
-  iat: number;
-  // Add other properties from your JWT payload if needed
+  // Add other claims as needed
 }
 
 @Injectable({
   providedIn: 'root'
 })
-/**
- * Service for handling user authentication, including login, token management, and logout.
- */
 export class AuthService {
-  private apiUrl = 'https://localhost:56412/api/v1/Auth'; // Base URL for the authentication API
+  private apiUrl = 'https://localhost:56412/api/v1/Auth';
+  private isAuthenticated = new BehaviorSubject<boolean>(this.hasValidToken());
 
-  public loginSuccess = new Subject<void>();
-  public logoutSuccess = new Subject<void>();
+  constructor(private http: HttpClient, private router: Router) { }
 
-  constructor(private http: HttpClient) { }
-
-  /**
-   * Sends a login request to the API with the provided username and password.
-   * @param username The user's username.
-   * @param password The user's password.
-   * @returns An Observable that emits the API response, typically containing a JWT token on success.
-   */
-  login(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { username, password });
+  get isAuthenticated$(): Observable<boolean> {
+    return this.isAuthenticated.asObservable();
   }
 
-  /**
-   * Stores the provided JWT token in the browser's local storage.
-   * @param token The JWT token to store.
-   */
-  setToken(token: string): void {
-    localStorage.setItem('jwt_token', token);
-    console.log('AuthService: Token set in localStorage:', token);
-    this.loginSuccess.next(); // Emit login success event
-  }
-
-  /**
-   * Retrieves the JWT token from the browser's local storage.
-   * It also validates if the token is expired. If expired, it removes the token.
-   * @returns The JWT token string, or null if not found or expired.
-   */
-  getToken(): string | null {
+  private hasValidToken(): boolean {
     const token = localStorage.getItem('jwt_token');
-    console.log('AuthService: Token retrieved from localStorage:', token);
-
-    if (token) {
-      try {
-        const decodedToken: DecodedToken = jwtDecode(token);
-        const currentTime = Date.now() / 1000; // Convert to seconds
-
-        if (decodedToken.exp < currentTime) {
-          // Token is expired
-          console.log('AuthService: Token expired. Removing from localStorage.');
-          localStorage.removeItem('jwt_token');
-          this.logoutSuccess.next(); // Emit logout success event due to expiry
-          return null;
-        }
-      } catch (error) {
-        // Error decoding token (e.g., malformed token)
-        console.error('AuthService: Error decoding token:', error);
-        localStorage.removeItem('jwt_token');
-        this.logoutSuccess.next();
-        return null;
-      }
+    if (!token) {
+      return false;
     }
-    return token;
+    try {
+      const decodedToken: DecodedToken = jwtDecode(token);
+      const isExpired = decodedToken.exp < (Date.now() / 1000);
+      if (isExpired) {
+        localStorage.removeItem('jwt_token');
+        return false;
+      }
+      return true;
+    } catch (error) {
+      localStorage.removeItem('jwt_token');
+      return false;
+    }
   }
 
-  /**
-   * Removes the JWT token from the browser's local storage, effectively logging out the user.
-   */
+  login(username: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login`, { username, password }).pipe(
+      tap(response => {
+        // --- START DEBUGGING LOGS ---
+        console.log('AuthService: Received response from login API:', response);
+        if (response && response.token) {
+          console.log('AuthService: Token found in response. Setting token and auth state.');
+          localStorage.setItem('jwt_token', response.token);
+          this.isAuthenticated.next(true);
+        } else {
+          console.error('AuthService: CRITICAL - "token" property not found in login response.', response);
+        }
+        // --- END DEBUGGING LOGS ---
+      })
+    );
+  }
+
   logout(): void {
     localStorage.removeItem('jwt_token');
-    console.log('AuthService: Token removed from localStorage.');
-    this.logoutSuccess.next(); // Emit logout success event
+    this.isAuthenticated.next(false);
+    this.router.navigate(['/login']);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('jwt_token');
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PortfolioService } from '../portfolio.service';
+import { PositionPnlDto } from '../models/portfolio.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,23 +8,23 @@ import { PortfolioService } from '../portfolio.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  portfolioPnl: any;
+  portfolioPnl: PositionPnlDto | null = null;
   errorMessage: string = '';
 
   constructor(private portfolioService: PortfolioService) { }
 
   ngOnInit(): void {
-    this.getPortfolioPnl();
+    this.loadPnl();
   }
 
-  getPortfolioPnl(): void {
-    this.portfolioService.getPortfolioPnl().subscribe(
-      data => {
+  loadPnl(): void {
+    this.portfolioService.getPnl().subscribe(
+      (data: PositionPnlDto) => {
         this.portfolioPnl = data;
       },
-      error => {
-        this.errorMessage = 'Failed to load portfolio data.';
-        console.error('Error fetching portfolio PnL:', error);
+      (error: any) => {
+        this.errorMessage = 'Failed to load portfolio PnL.';
+        console.error('Error fetching PnL:', error);
       }
     );
   }

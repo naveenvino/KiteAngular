@@ -1,0 +1,132 @@
+@use '@angular/material' as mat;
+
+/* Define a custom typography config */
+$custom-typography: mat.define-typography-config(
+  $font-family: 'Roboto, "Helvetica Neue", sans-serif'
+);
+
+/* Define a custom color palette inspired by professional trading platforms */
+$algotest-primary: mat.define-palette(mat.$blue-palette, 700, 500, 900);
+$algotest-accent: mat.define-palette(mat.$orange-palette, A200, A100, A400);
+$algotest-warn: mat.define-palette(mat.$red-palette);
+
+/* Create the custom theme object */
+$algotest-theme: mat.define-light-theme((
+  color: (
+    primary: $algotest-primary,
+    accent: $algotest-accent,
+    warn: $algotest-warn,
+  ),
+  typography: $custom-typography
+));
+
+// Apply the custom theme
+@include mat.all-component-themes($algotest-theme);
+
+/* Global Styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f0f2f5; /* A slightly lighter grey for a modern feel */
+  color: #333; /* Darker text for better readability */
+}
+
+/* Ensure all elements respect padding and border in their total width and height */
+* {
+  box-sizing: border-box;
+}
+
+/* General container styling */
+.container {
+  padding: 20px;
+}
+
+/* Material Card general styling */
+.mat-card {
+  margin-bottom: 20px; /* Add some space between cards */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+  border-radius: 8px; /* Slightly rounded corners */
+}
+
+/* Full width input for forms */
+.full-width-input {
+  width: 100%;
+}
+
+/* Alerts/Messages */
+.alert {
+  padding: 10px;
+  margin-top: 15px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-color: #f5c6cb;
+}
+
+/* Custom styles for form sections */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Space between form fields */
+  margin-bottom: 15px;
+}
+
+.form-section {
+  flex: 1; /* Distribute space evenly */
+  min-width: 280px; /* Minimum width before wrapping */
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.radio-group mat-radio-button {
+  margin-bottom: 8px;
+}
+
+/* Style for the strategy list cards */
+.strategy-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.strategy-card:hover {
+  transform: translateY(-3px); /* Slight lift on hover */
+}
+
+.strategy-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.detail-section strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.detail-section span {
+  font-size: 0.95em;
+  color: #666;
+}
+
+.no-strategies {
+  text-align: center;
+  padding: 30px;
+  color: #777;
+  font-style: italic;
+}

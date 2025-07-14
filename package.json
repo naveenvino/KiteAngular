@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "node --openssl-legacy-provider ./node_modules/@angular/cli/bin/ng serve",
-    "build": "node --openssl-legacy-provider ./node_modules/@angular/cli/bin/ng build",
+    "start": "set NODE_OPTIONS=--openssl-legacy-provider && ng serve",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "docs": "typedoc --entryPoints src/app/auth/auth.service.ts src/app/portfolio.service.ts src/app/orders.service.ts src/app/market-data.service.ts src/app/strategy.service.ts src/app/backtesting.service.ts src/app/screener.service.ts src/app/notification.service.ts --exclude src/**/*.spec.ts --out docs --ignoreCompilerErrors"

@@ -1,9 +1,9 @@
-<div class="strategy-add-container">
+
+<div class="strategy-edit-container">
   <form [formGroup]="strategyForm" (ngSubmit)="onSubmit()">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>Create Alert-Driven Strategy</mat-card-title>
-        <mat-card-subtitle>Define the rules for how to handle incoming TradingView alerts.</mat-card-subtitle>
+        <mat-card-title>Edit Strategy</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <mat-accordion multi="true">
@@ -18,6 +18,17 @@
                 <mat-label>Strategy Name</mat-label>
                 <input matInput formControlName="name" required>
               </mat-form-field>
+              <mat-form-field>
+                <mat-label>Strategy Type</mat-label>
+                <mat-select formControlName="strategyType" required>
+                  <mat-option value="NiftyOptionStrategy">Nifty Option Strategy</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Allocated Capital</mat-label>
+                <input matInput type="number" formControlName="allocatedCapital" required>
+              </mat-form-field>
+              <mat-slide-toggle formControlName="isActive">Is Active</mat-slide-toggle>
               <mat-form-field>
                 <mat-label>Index</mat-label>
                 <mat-select formControlName="index" required>
@@ -170,35 +181,10 @@
 
           </mat-expansion-panel>
 
-          <!-- API Risk Parameters -->
-          <mat-expansion-panel [expanded]="true" formGroupName="riskParameters">
-            <mat-expansion-panel-header>
-              <mat-panel-title>API Risk Parameters</mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="form-row">
-              <mat-form-field>
-                <mat-label>Max Open Positions</mat-label>
-                <input matInput type="number" formControlName="maxOpenPositions" required>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Max Exposure</mat-label>
-                <input matInput type="number" formControlName="maxExposure" required>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Max Loss</mat-label>
-                <input matInput type="number" formControlName="maxLoss" required>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Max Profit</mat-label>
-                <input matInput type="number" formControlName="maxProfit" required>
-              </mat-form-field>
-            </div>
-          </mat-expansion-panel>
-
         </mat-accordion>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-raised-button color="primary" type="submit" [disabled]="strategyForm.invalid">Create Strategy</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="strategyForm.invalid">Update Strategy</button>
         <button mat-button type="button" routerLink="/strategy/list">Cancel</button>
       </mat-card-actions>
     </mat-card>

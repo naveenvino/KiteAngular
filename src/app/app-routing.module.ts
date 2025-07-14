@@ -10,6 +10,7 @@ import { OrderHistoryComponent } from './orders/order-history/order-history.comp
 import { QuotesComponent } from './market-data/quotes/quotes.component';
 import { StrategyListComponent } from './strategy/strategy-list/strategy-list.component';
 import { StrategyAddComponent } from './strategy/strategy-add/strategy-add.component';
+import { StrategyEditComponent } from './strategy/strategy-edit/strategy-edit.component';
 import { BacktestComponent } from './backtesting/backtest/backtest.component';
 import { ScreenerListComponent } from './screener/screener-list/screener-list.component';
 import { ScreenerAddComponent } from './screener/screener-add/screener-add.component';
@@ -18,6 +19,7 @@ import { NotificationPreferencesComponent } from './notifications/notification-p
 import { NotificationAddComponent } from './notifications/notification-add/notification-add.component';
 import { TradingActionsComponent } from './trading/trading-actions/trading-actions.component';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
+import { TradeAlertsComponent } from './trade-alerts/trade-alerts.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -32,8 +34,9 @@ const routes: Routes = [
       { path: 'open-orders', component: OpenOrdersComponent },
       { path: 'order-history', component: OrderHistoryComponent },
       { path: 'quotes', component: QuotesComponent },
-      { path: 'strategies', component: StrategyListComponent },
-      { path: 'add-strategy', component: StrategyAddComponent },
+      { path: 'strategy/list', component: StrategyListComponent },
+      { path: 'strategy/add', component: StrategyAddComponent },
+      { path: 'strategy/edit/:id', component: StrategyEditComponent },
       { path: 'backtest', component: BacktestComponent },
       { path: 'screeners', component: ScreenerListComponent },
       { path: 'add-screener', component: ScreenerAddComponent },
@@ -41,9 +44,11 @@ const routes: Routes = [
       { path: 'notification-preferences', component: NotificationPreferencesComponent },
       { path: 'add-notification-preference', component: NotificationAddComponent },
       { path: 'trading-actions', component: TradingActionsComponent },
+      { path: 'trade-alerts', component: TradeAlertsComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' } // Default authenticated route
     ]
   },
+  
   { path: '**', redirectTo: 'login' } // Redirect any unknown routes to login
 ];
 

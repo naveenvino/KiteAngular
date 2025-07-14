@@ -1,39 +1,25 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Holding, PositionPnlDto, TradePosition } from './models/portfolio.model';
 
 @Injectable({
   providedIn: 'root'
 })
-/**
- * Service for fetching portfolio-related data from the API.
- */
 export class PortfolioService {
-  private apiUrl = 'https://localhost:56412/Portfolio'; // Base URL for PortfolioController
+  private apiUrl = 'https://localhost:56412/Portfolio';
 
   constructor(private http: HttpClient) { }
 
-  /**
-   * Retrieves the overall Profit and Loss (PnL) for the portfolio.
-   * @returns An Observable that emits the portfolio PnL data.
-   */
-  getPortfolioPnl(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/pnl`);
+  getHoldings(): Observable<Holding[]> {
+    return this.http.get<Holding[]>(`${this.apiUrl}/holdings`);
   }
 
-  /**
-   * Retrieves the current holdings in the portfolio.
-   * @returns An Observable that emits an array of holding objects.
-   */
-  getHoldings(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/holdings`);
+  getPositions(): Observable<TradePosition[]> {
+    return this.http.get<TradePosition[]>(`${this.apiUrl}/positions`);
   }
 
-  /**
-   * Retrieves the current positions (open and closed) in the portfolio.
-   * @returns An Observable that emits an array of position objects.
-   */
-  getPositions(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/positions`);
+  getPnl(): Observable<PositionPnlDto> {
+    return this.http.get<PositionPnlDto>(`${this.apiUrl}/pnl`);
   }
 }

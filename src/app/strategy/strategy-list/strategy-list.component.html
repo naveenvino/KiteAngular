@@ -1,54 +1,63 @@
 <div class="strategy-list-container">
-  <h2>Active Strategies</h2>
+  <div class="header">
+    <h2>Your Trading Strategies</h2>
+    <p>Total Allocated Capital: {{ totalAllocatedCapital | currency:'INR' }}</p>
+    <button mat-raised-button color="primary" routerLink="/strategy/add">Create New Strategy</button>
+  </div>
 
   <mat-form-field appearance="standard" class="full-width-input">
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. MyStrategy">
+    <mat-label>Filter Strategies</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Filter by name or description">
   </mat-form-field>
 
-  <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
-
-      <!-- ID Column -->
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-        <td mat-cell *matCellDef="let strategy"> {{strategy.id}} </td>
-      </ng-container>
-
-      <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-        <td mat-cell *matCellDef="let strategy"> {{strategy.name}} </td>
-      </ng-container>
-
-      <!-- Status Column -->
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-        <td mat-cell *matCellDef="let strategy"> {{strategy.status}} </td>
-      </ng-container>
-
-      <!-- Instrument Column -->
-      <ng-container matColumnDef="instrument">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Instrument </th>
-        <td mat-cell *matCellDef="let strategy"> {{strategy.instrumentToken}} </td>
-      </ng-container>
-
-      <!-- Quantity Column -->
-      <ng-container matColumnDef="quantity">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantity </th>
-        <td mat-cell *matCellDef="let strategy"> {{strategy.quantity}} </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  <div *ngIf="dataSource.filteredData.length === 0" class="no-strategies">
+    <p>No strategies found. Why not create one?</p>
   </div>
 
-  <div *ngIf="dataSource.data.length === 0 && !errorMessage">
-    <p>No active strategies found.</p>
-  </div>
+  <mat-card *ngFor="let strategy of dataSource.filteredData" class="strategy-card">
+    <mat-card-header>
+      <mat-card-title>{{ strategy.name }}</mat-card-title>
+      <mat-card-subtitle>{{ strategy.parameters?.description }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="strategy-details">
+        <div class="detail-section">
+          <strong>Strategy Type:</strong>
+          <span>{{ strategy.strategyType }}</span>
+        </div>
+        <div class="detail-section">
+          <strong>Status:</strong>
+          <span>{{ strategy.isActive ? 'Active' : 'Inactive' }}</span>
+        </div>
+        <div class="detail-section">
+          <strong>Allocated Capital:</strong>
+          <span>{{ strategy.allocatedCapital | currency:'INR' }}</span>
+        </div>
+        <div class="detail-section" *ngIf="strategy.parameters?.executionMode">
+          <strong>Execution Mode:</strong>
+          <span>{{ strategy.parameters.executionMode }}</span>
+        </div>
+        <div class="detail-section" *ngIf="strategy.riskParameters">
+          <strong>Risk Parameters:</strong>
+          <span>Max Open Positions: {{ strategy.riskParameters.maxOpenPositions }}</span>
+          <span>Max Exposure: {{ strategy.riskParameters.maxExposure | currency:'INR' }}</span>
+          <span>Max Loss: {{ strategy.riskParameters.maxLoss | currency:'INR' }}</span>
+          <span>Max Profit: {{ strategy.riskParameters.maxProfit | currency:'INR' }}</span>
+        </div>
+        <div class="detail-section" *ngIf="strategy.parameters?.description">
+          <strong>Description:</strong>
+          <span>{{ strategy.parameters.description }}</span>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="primary" [routerLink]="['/strategy/edit', strategy.id]">EDIT</button>
+      <button mat-button color="warn" (click)="squareOff(strategy.id)">SQUARE OFF</button>
+      <button mat-button color="warn" (click)="deleteStrategy(strategy.id)">DELETE</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
 
   <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
 </div>

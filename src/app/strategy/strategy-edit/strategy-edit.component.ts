@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StrategyService } from '../../strategy.service';
 import {
@@ -14,12 +14,13 @@ import {
 } from '../../models/strategy.model';
 
 @Component({
-  selector: 'app-strategy-add',
-  templateUrl: './strategy-add.component.html',
-  styleUrls: ['./strategy-add.component.css']
+  selector: 'app-strategy-edit',
+  templateUrl: './strategy-edit.component.html',
+  styleUrls: ['./strategy-edit.component.css']
 })
-export class StrategyAddComponent implements OnInit {
+export class StrategyEditComponent implements OnInit {
   strategyForm!: FormGroup;
+  strategyId!: string;
 
   // Enums for template access
   index = Object.values(Index);
@@ -33,11 +34,14 @@ export class StrategyAddComponent implements OnInit {
     private fb: FormBuilder,
     private strategyService: StrategyService,
     private router: Router,
+    private route: ActivatedRoute,
     private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
+    this.strategyId = this.route.snapshot.paramMap.get('id') as string;
     this.strategyForm = this.fb.group({
+      id: [this.strategyId],
       name: ['', Validators.required],
       isActive: [true],
       allocatedCapital: [100000, [Validators.required, Validators.min(1)]],
@@ -89,30 +93,23 @@ export class StrategyAddComponent implements OnInit {
         maxProfit: [100000, [Validators.required, Validators.min(0)]]
       })
     });
-
-    // Add dynamic validation logic
-    this.setupConditionalValidation();
+    this.loadStrategyData();
   }
 
-  setupConditionalValidation(): void {
-    const sizingMethodControl = this.strategyForm.get('sizingMethod');
-    const quantityControl = this.strategyForm.get('quantity');
-    const allocatedMarginControl = this.strategyForm.get('allocatedCapital');
-
-    sizingMethodControl?.valueChanges.subscribe(method => {
-      if (method === SizingMethod.FixedQuantity) {
-        quantityControl?.setValidators([Validators.required, Validators.min(1)]);
-        allocatedMarginControl?.clearValidators();
-      } else {
-        quantityControl?.clearValidators();
-        allocatedMarginControl?.setValidators([Validators.required, Validators.min(1)]);
+  loadStrategyData(): void {
+    this.strategyService.getStrategyById(parseInt(this.strategyId)).subscribe(
+      data => {
+        // Deserialize data from API's StrategyConfig format to form controls
+        const formValue = this.strategyService.fromApiStrategyConfig(data);
+        this.strategyForm.patchValue(formValue);
+      },
+      error => {
+        this.snackBar.open('Error loading strategy data.', 'Close', { duration: 3000 });
+        console.error(error);
       }
-      quantityControl?.updateValueAndValidity();
-      allocatedMarginControl?.updateValueAndValidity();
-    });
+    );
   }
 
-  // --- Submission ---
   onSubmit(): void {
     if (this.strategyForm.invalid) {
       this.snackBar.open('Please fill all required fields correctly.', 'Close', { duration: 3000 });
@@ -121,16 +118,16 @@ export class StrategyAddComponent implements OnInit {
       return;
     }
 
-    const strategyData: Strategy = this.strategyForm.value;
-    
-    this.strategyService.addStrategy(strategyData).subscribe(
+    const updatedStrategy: Strategy = this.strategyForm.value;
+
+    this.strategyService.updateStrategy(parseInt(this.strategyId), updatedStrategy).subscribe(
       () => {
-        this.snackBar.open('Strategy added successfully!', 'Close', { duration: 3000 });
+        this.snackBar.open('Strategy updated successfully!', 'Close', { duration: 3000 });
         this.router.navigate(['/strategy/list']);
       },
       error => {
-        this.snackBar.open('Failed to add strategy. See console for details.', 'Close', { duration: 5000 });
-        console.error('Error adding strategy:', error);
+        this.snackBar.open('Failed to update strategy. See console for details.', 'Close', { duration: 5000 });
+        console.error('Error updating strategy:', error);
       }
     );
   }
